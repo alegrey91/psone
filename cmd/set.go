@@ -16,8 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
+    "github.com/alegrey91/psone/lib/config"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +27,8 @@ var setCmd = &cobra.Command{
 	Long: `
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("set called")
+        permanent, _ := cmd.Flags().GetBool("write")
+	    config.SetPS1(args[0], permanent)
 	},
 }
 
@@ -40,6 +40,7 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// setCmd.PersistentFlags().String("foo", "", "A help for foo")
+	setCmd.PersistentFlags().Bool("write", false, "Write to file.")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:

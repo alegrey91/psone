@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"github.com/alegrey91/psone/lib/config"
 
 	"github.com/spf13/cobra"
 )
@@ -28,7 +28,7 @@ var getCmd = &cobra.Command{
 	Long: `
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("get called")
+		config.ListPS1()
 	},
 }
 

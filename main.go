@@ -18,5 +18,6 @@ package main
 import "github.com/alegrey91/psone/cmd"
 
 func main() {
+	//config.ListPS1()
 	cmd.Execute()
 }

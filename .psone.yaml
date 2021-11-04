@@ -1,0 +1,5 @@
+psones:
+  daily:
+    value: "[\\u@\\h] >>> "
+  halloween:
+    value: "[\\u@\\h] 🎃👻🦇 > \\[$(tput sgr0)\\]"
