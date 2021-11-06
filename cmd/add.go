@@ -22,12 +22,13 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add PS1 to your list",
-	Long: `
-`,
+	Use:     "add [NAME] [VALUE]",
+	Short:   "Add PS1 to your list",
+	Example: "  psone add \"daily\" \"[\\u@\\h]\"",
 	Run: func(cmd *cobra.Command, args []string) {
-		config.AddPS1(args[0], args[1])
+		PS1Name := args[0]
+		PS1Value := args[1]
+		config.AddPS1(PS1Name, PS1Value)
 	},
 }
 

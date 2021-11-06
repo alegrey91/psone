@@ -22,12 +22,12 @@ import (
 
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
-	Use:   "remove",
-	Short: "Remove a PS1 from your list",
-	Long: `
-`,
+	Use:     "remove [NAME]",
+	Short:   "Remove a PS1 from your list",
+	Example: "  psone remove \"daily\"",
 	Run: func(cmd *cobra.Command, args []string) {
-		config.RemovePS1(args[0])
+		PS1Name := args[0]
+		config.RemovePS1(PS1Name)
 	},
 }
 

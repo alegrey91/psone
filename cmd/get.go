@@ -27,6 +27,7 @@ var getCmd = &cobra.Command{
 	Short: "Get the list of available PS1",
 	Long: `
 `,
+	Example: "  psone get",
 	Run: func(cmd *cobra.Command, args []string) {
 		config.ListPS1()
 	},

@@ -23,27 +23,30 @@ func getConfig() *Configs {
 
 	data, err := os.ReadFile(homeEnv + "/.psone.yaml")
 	if err != nil {
-		panic(err)
+		fmt.Printf("error reading ~/.psone.yaml file.\n")
+		os.Exit(1)
 	}
 
 	err = yaml.Unmarshal([]byte(data), &conf)
 	if err != nil {
-		fmt.Printf("cannot unmarshal data: %v", err)
+		fmt.Printf("cannot unmarshal data: %v\n", err)
 		os.Exit(1)
 	}
 	return &conf
 }
 
+// ListPS1 show the list of your saved PS1.
 func ListPS1() {
 	conf := getConfig()
 
 	fmt.Println("psones:")
 	for ps1, _ := range conf.Psones {
-		fmt.Printf("  - name: %s:\n    value: \"%s\"\n", ps1, conf.Psones[ps1].Value)
+		fmt.Printf("  name: %s:\n    value: \"%s\"\n", ps1, conf.Psones[ps1].Value)
 	}
 }
 
-func SetPS1(NewPS1 string, permanent bool) {
+// SetPS1 write to file one of the PS1 in the list.
+func SetPS1(NewPS1 string, debug bool) {
 	conf := getConfig()
 	homeEnv := os.Getenv("HOME")
 
@@ -55,24 +58,27 @@ func SetPS1(NewPS1 string, permanent bool) {
 
 	data, err := os.ReadFile(homeEnv + "/.bashrc")
 	if err != nil {
-		panic(err)
+		fmt.Printf("error reading ~/.bashrc file.\n")
+		os.Exit(1)
 	}
 
 	// Find PS1 in .bashrc and replace with new one.
 	match := regexp.MustCompile(`(?m)(^export PS1\=)\"(.*)\"$`)
 	res := match.ReplaceAllString(string(data), "${1}"+"\""+conf.Psones[NewPS1].Value+"\"")
 
-	// If argument --write has been passed, override ~/.bashrc with newest PS1.
-	if permanent {
+	// If argument --debug is passed, print the result output (whitout write to file).
+	if !debug {
 		err := os.WriteFile(homeEnv+"/.bashrc", []byte(res), 0644)
 		if err != nil {
-			fmt.Printf("error updating .bashrc file.")
+			fmt.Printf("error updating .bashrc file.\n")
+			os.Exit(1)
 		}
 	} else {
 		fmt.Println(string(res))
 	}
 }
 
+// AddPS1 add a new PS1 to your list.
 func AddPS1(PS1Name string, PS1Value string) {
 	conf := getConfig()
 	homeEnv := os.Getenv("HOME")
@@ -88,16 +94,18 @@ func AddPS1(PS1Name string, PS1Value string) {
 
 	data, err := yaml.Marshal(&conf)
 	if err != nil {
-		fmt.Printf("cannot marshall data %v", err)
+		fmt.Printf("cannot marshall data %v\n", err)
 		os.Exit(1)
 	}
 
 	err = os.WriteFile(homeEnv+"/.psone.yaml", []byte(data), 0644)
 	if err != nil {
-		fmt.Printf("error updating .psone.yaml file.")
+		fmt.Printf("error updating .psone.yaml file.\n")
+		os.Exit(1)
 	}
 }
 
+// RemovePS1 remove a PS1 from your list.
 func RemovePS1(PS1Name string) {
 	conf := getConfig()
 	homeEnv := os.Getenv("HOME")
@@ -110,12 +118,13 @@ func RemovePS1(PS1Name string) {
 
 	data, err := yaml.Marshal(&conf)
 	if err != nil {
-		fmt.Printf("cannot marshall data %v", err)
+		fmt.Printf("cannot marshall data %v\n", err)
 		os.Exit(1)
 	}
 
 	err = os.WriteFile(homeEnv+"/.psone.yaml", []byte(data), 0644)
 	if err != nil {
-		fmt.Printf("error updating .psone.yaml file.")
+		fmt.Printf("error updating .psone.yaml file.\n")
+		os.Exit(1)
 	}
 }

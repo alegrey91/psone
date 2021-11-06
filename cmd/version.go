@@ -16,31 +16,33 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/alegrey91/psone/lib/config"
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
+var (
+	Version string = "0.0.1"
+)
+
 // setCmd represents the set command
-var setCmd = &cobra.Command{
-	Use:     "set [NAME]",
-	Short:   "Set the PS1 from your list",
-	Example: "  psone set \"daily\"",
+var versionCmd = &cobra.Command{
+	Use:     "version",
+	Short:   "Show the psone version.",
+	Example: "  psone version",
 	Run: func(cmd *cobra.Command, args []string) {
-		PS1Name := args[0]
-		debug, _ := cmd.Flags().GetBool("debug")
-		config.SetPS1(PS1Name, debug)
+		fmt.Printf("psone v%s\n", Version)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(setCmd)
+	rootCmd.AddCommand(versionCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// setCmd.PersistentFlags().String("foo", "", "A help for foo")
-	setCmd.PersistentFlags().Bool("debug", false, "Show the result output (whitout write to file).")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
