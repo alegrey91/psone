@@ -23,10 +23,8 @@ import (
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "Get the list of available PS1",
-	Long: `
-`,
+	Use:     "get",
+	Short:   "Get the list of available PS1",
 	Example: "  psone get",
 	Run: func(cmd *cobra.Command, args []string) {
 		config.ListPS1()
