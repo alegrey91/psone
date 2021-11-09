@@ -8,6 +8,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var (
+	DefaultPS1Name     string = "default"
+	DefaultPS1Value    string = `[\u@\h \W] 🎮 $ `
+	DefaultPS1FileName string = ".psone.yaml"
+)
+
 type Psone struct {
 	//	Name  string `yaml:"name"`
 	Value string `yaml:"value"`
@@ -21,7 +27,7 @@ func getConfig() *Configs {
 	conf := Configs{}
 	homeEnv := os.Getenv("HOME")
 
-	data, err := os.ReadFile(homeEnv + "/.psone.yaml")
+	data, err := os.ReadFile(homeEnv + "/" + DefaultPS1FileName)
 	if err != nil {
 		fmt.Printf("error reading ~/.psone.yaml file.\n")
 		os.Exit(1)
@@ -98,7 +104,7 @@ func AddPS1(PS1Name string, PS1Value string) {
 		os.Exit(1)
 	}
 
-	err = os.WriteFile(homeEnv+"/.psone.yaml", []byte(data), 0644)
+	err = os.WriteFile(homeEnv+"/"+DefaultPS1FileName, []byte(data), 0644)
 	if err != nil {
 		fmt.Printf("error updating .psone.yaml file.\n")
 		os.Exit(1)
@@ -122,9 +128,52 @@ func RemovePS1(PS1Name string) {
 		os.Exit(1)
 	}
 
-	err = os.WriteFile(homeEnv+"/.psone.yaml", []byte(data), 0644)
+	err = os.WriteFile(homeEnv+"/"+DefaultPS1FileName, []byte(data), 0644)
 	if err != nil {
 		fmt.Printf("error updating .psone.yaml file.\n")
 		os.Exit(1)
+	}
+}
+
+// AddPS1 add a new PS1 to your list.
+func GenerateFilePS1(PS1Path string, Force bool) {
+	conf := Configs{}
+	conf.Psones = make(map[string]Psone)
+	conf.Psones[DefaultPS1Name] = Psone{
+		Value: DefaultPS1Value,
+	}
+
+	homeEnv := os.Getenv("HOME")
+
+	data, err := yaml.Marshal(&conf)
+	if err != nil {
+		fmt.Printf("cannot marshall data %v\n", err)
+		os.Exit(1)
+	}
+
+	if PS1Path == "" {
+		if _, err := os.Stat(homeEnv + "/" + DefaultPS1FileName); err == nil {
+			if !Force {
+				fmt.Printf("file %s/%s already exists.\n", homeEnv, DefaultPS1FileName)
+				os.Exit(1)
+			}
+			err = os.WriteFile(homeEnv+"/"+DefaultPS1FileName, []byte(data), 0644)
+			if err != nil {
+				fmt.Printf("error generating .psone.yaml file to %s.\n", homeEnv)
+				os.Exit(1)
+			}
+		}
+	} else {
+		if _, err := os.Stat(homeEnv + "/" + DefaultPS1FileName); err == nil {
+			if !Force {
+				fmt.Printf("file %s/%s already exists.\n", homeEnv, DefaultPS1FileName)
+				os.Exit(1)
+			}
+			err = os.WriteFile(PS1Path+"/"+DefaultPS1FileName, []byte(data), 0644)
+			if err != nil {
+				fmt.Printf("error generating .psone.yaml file to %s.\n", PS1Path)
+				os.Exit(1)
+			}
+		}
 	}
 }

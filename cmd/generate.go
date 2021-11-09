@@ -16,35 +16,34 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/alegrey91/psone/lib/config"
 	"github.com/spf13/cobra"
 )
 
-var (
-	Version string = "0.0.2"
-)
-
-// setCmd represents the set command
-var versionCmd = &cobra.Command{
-	Use:     "version",
-	Short:   "Show the psone version.",
-	Example: "  psone version",
+// generateCmd represents the generate command
+var generateCmd = &cobra.Command{
+	Use:     "generate",
+	Short:   "Generate a ready to use .psone.yaml file",
+	Example: "  psone generate --output /tmp/",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("psone v%s\n", Version)
+		path, _ := cmd.Flags().GetString("output")
+		force, _ := cmd.Flags().GetBool("force")
+		config.GenerateFilePS1(path, force)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(generateCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// setCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// generateCmd.PersistentFlags().String("foo", "", "A help for foo")
+	generateCmd.PersistentFlags().String("output", "", "Write .psone.yaml file to path (default /home/$USER/)")
+	generateCmd.PersistentFlags().Bool("force", false, "Force to override generated file.")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// setCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
