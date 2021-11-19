@@ -43,7 +43,7 @@ This is going to be your result: `[user@laptop] 🎃👻🦇 > `.
 Then, if you want to add a new one (the easter one):
 
 ```bash
-psone add "easter" "[\u@\h] 🐇🥚 \[\]"
+psone add "easter" "[\\u@\\h] 🐇🥚 \\[\\]"
 ```
 
 Here's the new updated `PS1`s list:
