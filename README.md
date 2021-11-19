@@ -68,6 +68,14 @@ That's it.
 
 For more information, just type: `psone help`.
 
+## Installation
+
+Just type the following command:
+
+```bash
+make
+```
+
 ## Contributions
 
 Of course, contributions are very welcome!
