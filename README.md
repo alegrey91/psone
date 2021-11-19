@@ -25,11 +25,11 @@ Fist of all, you need to generate your own `~/.psone.yaml` file. Here's an examp
 ```yaml
 psones:
   default:
-    value: "[\u@\h \W]\$ "
+    value: "[\\u@\\h \\W]\\$ "
   halloween:
-    value: "[\u@\h] 🎃👻🦇 > \[$(tput sgr0)\]"
+    value: "[\\u@\\h] 🎃👻🦇 > \\[$(tput sgr0)\\]"
   christmas:
-    value: "[\u@\h] 🎅🎄❄️ \[\]"
+    value: "[\\u@\\h] 🎅🎄❄️ \\[\\]"
 ```
 
 Once you got your config file, you are ready to set your custom `PS1`. 
