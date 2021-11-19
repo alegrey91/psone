@@ -47,7 +47,7 @@ func ListPS1() {
 
 	fmt.Println("psones:")
 	for ps1, _ := range conf.Psones {
-		fmt.Printf("  name: %s:\n    value: \"%s\"\n", ps1, conf.Psones[ps1].Value)
+		fmt.Printf("  %s:\n    value: \"%s\"\n", ps1, conf.Psones[ps1].Value)
 	}
 }
 

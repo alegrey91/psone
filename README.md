@@ -56,9 +56,9 @@ psone get
 psones:
   default:
     value: "[\u@\h \W]\$ "
-  name: easter:
+  easter:
     value: "[\u@\h] 🐇🥚 \[\]"
-  name: halloween:
+  halloween:
     value: "[\u@\h] 🎃👻🦇 > \[$(tput sgr0)\]"
   christmas:
     value: "[\u@\h] 🎅🎄❄️ \[\]"
