@@ -16,35 +16,49 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"log"
+	"os"
+	"os/exec"
 
+	"github.com/alegrey91/psone/lib/config"
 	"github.com/spf13/cobra"
 )
 
-var (
-	Version string = "0.0.4"
-)
-
-// setCmd represents the set command
-var versionCmd = &cobra.Command{
-	Use:     "version",
-	Short:   "Show the psone version.",
-	Example: "  psone version",
+// editCmd represents the edit command
+var editCmd = &cobra.Command{
+	Use:     "edit",
+	Short:   "Edit configuration file",
+	Example: "  psone edit",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("psone v%s\n", Version)
+		editor := os.Getenv("EDITOR")
+		if editor == "" {
+			log.Fatalf("Error: variable EDITOR not set.")
+		}
+		home := os.Getenv("HOME")
+		if home == "" {
+			log.Fatalf("Error: variable HOME not set.")
+		}
+
+		editCmd := exec.Command(editor, home+"/"+config.DefaultPS1FileName)
+		editCmd.Stdin = os.Stdin
+		editCmd.Stdout = os.Stdout
+		err := editCmd.Run()
+		if err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(editCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// setCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// editCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// setCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// editCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
