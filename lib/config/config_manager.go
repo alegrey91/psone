@@ -136,14 +136,21 @@ func RemovePS1(PS1Name string) {
 }
 
 // AddPS1 add a new PS1 to your list.
-func GenerateFilePS1(PS1Path string, Force bool) {
+func GenerateFilePS1(Path string, Force bool) {
 	conf := Configs{}
 	conf.Psones = make(map[string]Psone)
 	conf.Psones[DefaultPS1Name] = Psone{
 		Value: DefaultPS1Value,
 	}
 
+    pathToConfigFile := ""
 	homeEnv := os.Getenv("HOME")
+	// Checking if --output has been provided.
+	if Path != "" {
+	    pathToConfigFile = Path + DefaultPS1FileName
+	} else {
+        pathToConfigFile = homeEnv + "/" + DefaultPS1FileName
+	}
 
 	data, err := yaml.Marshal(&conf)
 	if err != nil {
@@ -151,29 +158,24 @@ func GenerateFilePS1(PS1Path string, Force bool) {
 		os.Exit(1)
 	}
 
-	if PS1Path == "" {
-		if _, err := os.Stat(homeEnv + "/" + DefaultPS1FileName); err == nil {
-			if !Force {
-				fmt.Printf("file %s/%s already exists.\n", homeEnv, DefaultPS1FileName)
-				os.Exit(1)
-			}
-			err = os.WriteFile(homeEnv+"/"+DefaultPS1FileName, []byte(data), 0644)
-			if err != nil {
-				fmt.Printf("error generating .psone.yaml file to %s.\n", homeEnv)
-				os.Exit(1)
-			}
-		}
-	} else {
-		if _, err := os.Stat(homeEnv + "/" + DefaultPS1FileName); err == nil {
-			if !Force {
-				fmt.Printf("file %s/%s already exists.\n", homeEnv, DefaultPS1FileName)
-				os.Exit(1)
-			}
-			err = os.WriteFile(PS1Path+"/"+DefaultPS1FileName, []byte(data), 0644)
-			if err != nil {
-				fmt.Printf("error generating .psone.yaml file to %s.\n", PS1Path)
-				os.Exit(1)
-			}
-		}
-	}
+    // Checking if file already exists.
+    if _, err := os.Stat(pathToConfigFile); err == nil {
+        // If --force option is enabled, then override config file.
+        if Force {
+            err = os.WriteFile(pathToConfigFile, []byte(data), 0644)
+            if err != nil {
+                fmt.Printf("error generating file to %s.\n", pathToConfigFile)
+                os.Exit(1)
+            }
+        } else {
+            fmt.Printf("file %s already exists.\nuse option --force if you want to override it.\n", pathToConfigFile)
+            os.Exit(1)
+        }
+    }
+    // File doesn't exist, so we create it.
+    err = os.WriteFile(pathToConfigFile, []byte(data), 0644)
+    if err != nil {
+        fmt.Printf("error generating file to %s.\n", pathToConfigFile)
+        os.Exit(1)
+    }
 }

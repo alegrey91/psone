@@ -22,7 +22,7 @@ import (
 )
 
 var (
-	Version string = "0.0.4"
+	Version string = "0.0.5"
 )
 
 // setCmd represents the set command
