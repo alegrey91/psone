@@ -76,6 +76,8 @@ Just type the following command:
 make
 ```
 
+or alternatively download the latest release from here: https://github.com/alegrey91/psone/releases
+
 ## Contributions
 
 Of course, contributions are very welcome!
